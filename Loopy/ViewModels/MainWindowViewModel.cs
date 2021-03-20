@@ -150,6 +150,7 @@ namespace Loopy.ViewModels
                 RemoveError(nameof(UpperBound));
             }
             RaisePropertyChanged("IsValid");
+            RaisePropertyChanged("EnableStartButton");
         }
         private void getConfigSettings()
         {
