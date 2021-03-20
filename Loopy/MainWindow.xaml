@@ -1,0 +1,119 @@
+﻿<Window x:Class="Loopy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Loopy"
+        mc:Ignorable="d"
+        Title="Loopy - Looping through integers" Height="450" Width="600">
+    <Window.Resources>
+        <!--TextBox styling-->
+        <Style TargetType="TextBox">
+            <Setter Property="MaxHeight" Value="20"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="Padding" Value="5,0,0,0"/>
+        </Style>
+        <!--Label styling-->
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <!--ListBox styling-->
+        <Style TargetType="ListBox">
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="Padding" Value="5,0,0,0"/>
+        </Style>
+
+        <!--Button styling-->
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="4" Background="LightGray" BorderBrush="DarkGray" BorderThickness="1,1,1,1" >
+                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="DarkGray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Background="#d5d6d2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Margin="5">
+                <Label Name="lblLowerBound">Lower Bound</Label>
+                <TextBox Name="txtLowerBound" TextAlignment="Right" Text="{Binding LowerBound}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1"  Margin="5">
+                <Label Name="lblUpperBound">Upper Bound</Label>
+                <TextBox Name="txtUpperBound" TextAlignment="Right" Text="{Binding UpperBound, Mode=TwoWay, NotifyOnValidationError=true}">
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Margin="5,0,0,0">
+                                <AdornedElementPlaceholder x:Name="textBox" />
+                                <ItemsControl ItemsSource="{Binding}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ErrorContent}" FontWeight="Bold" Foreground="Red" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+                </TextBox>
+            </StackPanel>
+
+        <Label Name="lblResults" Grid.Column="1" Grid.Row="0">Results</Label>
+        <ListBox Name="lstResults" Grid.Column="2" Grid.Row="0" Grid.RowSpan="4" ItemsSource="{Binding Results}" Width="200">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DisplayText}" Foreground="{Binding Color}" FontWeight="{Binding FontWeight}"></TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+            <Button Name="cmdExecuteLoop" Content="Start Loop" Command="{Binding BtnStartLoop}" IsEnabled="{Binding EnableStartButton}" HorizontalAlignment="Right"/>
+            <Button Name="cmdCancel" Content="Cancel" Command="{Binding BtnCancelLoop}" IsEnabled="{Binding IsLoopInProgress}" HorizontalAlignment="Right"/>
+        </StackPanel>
+        <StatusBar Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label>Status:</Label>
+                    <TextBlock x:Name="tblStatus" Text="{Binding Path=Status, Mode=OneWay}" Margin="6"/>
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right" >
+                <StackPanel Orientation="Horizontal">
+                    <Label Name="lblPctProgress">% Progress</Label>
+                <ProgressBar x:Name="pbrPercent" Width="350" Height="15" Value="{Binding Path=PercentProgress, Mode=OneWay}"></ProgressBar>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+
+    </Grid>
+</Window>
